@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import { RxCross2 } from 'react-icons/rx';
 
 import { useSelector, useDispatch } from 'react-redux';
@@ -7,6 +7,24 @@ import { setOpen } from '../redux/appSlice';
 const SendMail = () => {
   const dispatch = useDispatch();
   const open = useSelector((state) => state.appSlice.open);
+
+  const toInputRef = useRef();
+  const subInputRef = useRef();
+  const msgInputRef = useRef();
+
+  const submitHandler = (e) => {
+    e.preventDefault();
+    const formData = {
+        to: toInputRef.current.value,
+        subject: subInputRef.current.value,
+        message: msgInputRef.current.value
+    }
+    console.log(formData)
+    toInputRef.current.value = null;
+    subInputRef.current.value = null;
+    msgInputRef.current.value = null;
+    dispatch(setOpen(false))
+  }
 
   return (
     <div
@@ -23,14 +41,17 @@ const SendMail = () => {
           <RxCross2 size={'10px'} />
         </div>
       </div>
-      <form className="flex flex-col p-3 gap-2">
-        <input type="text" placeholder="To" className="outline-none py-1" />
+      <form onSubmit={submitHandler} className="flex flex-col p-3 gap-2">
+        <input ref={toInputRef} name="to" type="text" placeholder="To" className="outline-none py-1" />
         <input
+            ref={subInputRef}
+            name="subject"
           type="text"
           placeholder="Subject"
           className="outline-none py-1"
         />
         <textarea
+            ref={msgInputRef}
           name="message"
           cols={'30'}
           rows={'10'}
