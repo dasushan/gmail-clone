@@ -1,11 +1,18 @@
-import React from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { IoIosSearch } from 'react-icons/io';
 import { RxHamburgerMenu } from 'react-icons/rx';
-import { CiCircleQuestion } from "react-icons/ci";
-import { CiSettings } from "react-icons/ci";
-import { PiDotsNineBold } from "react-icons/pi";
+import { CiCircleQuestion } from 'react-icons/ci';
+import { CiSettings } from 'react-icons/ci';
+import { PiDotsNineBold } from 'react-icons/pi';
 import Avatar from 'react-avatar';
+import { useDispatch } from 'react-redux';
+import { setSearchText } from '../../redux/appSlice';
 export const Navbar = () => {
+  const [input, setInput] = useState("");
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(setSearchText(input))
+  }, [input])
   return (
     <div className="flex items-center justify-between h-16 mx-3">
       <div className="flex items-center gap-10">
@@ -25,26 +32,33 @@ export const Navbar = () => {
         <div className="flex items-center bg-[#EAF1FB] px-2 py-3 rounded-full ">
           <IoIosSearch size={'24px'} className="text-gray-700" />
           <input
+            value={input}
+            onChange={(e) => setInput(e.target.value)}
+            
             type="text"
             placeholder="Search Mail"
             className="rounded-full w-full bg-transparent outline-none px-1"
           />
         </div>
       </div>
-      <div className='md:block hidden'>
-        <div className='flex items-center gap-2'>
-            <div className='p-3 rounded-full hover:bg-gray-100 cursor-pointer'>
-                <CiCircleQuestion size={'20px'}/>
-            </div>
-            <div className='p-3 rounded-full hover:bg-gray-100 cursor-pointer'>
-                <CiSettings size={'20px'}/>
-            </div>
-            <div className='p-3 rounded-full hover:bg-gray-100 cursor-pointer'>
-                <PiDotsNineBold size={'20px'}/>
-            </div>
-            <div className='cursor-pointer'>
-                <Avatar src='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTWi4bk1s8Q2HPdq4fAPfLVKO6I4UrbUGW93w&s' size="40" round={true}/>
-            </div>
+      <div className="md:block hidden">
+        <div className="flex items-center gap-2">
+          <div className="p-3 rounded-full hover:bg-gray-100 cursor-pointer">
+            <CiCircleQuestion size={'20px'} />
+          </div>
+          <div className="p-3 rounded-full hover:bg-gray-100 cursor-pointer">
+            <CiSettings size={'20px'} />
+          </div>
+          <div className="p-3 rounded-full hover:bg-gray-100 cursor-pointer">
+            <PiDotsNineBold size={'20px'} />
+          </div>
+          <div className="cursor-pointer">
+            <Avatar
+              src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTWi4bk1s8Q2HPdq4fAPfLVKO6I4UrbUGW93w&s"
+              size="40"
+              round={true}
+            />
+          </div>
         </div>
       </div>
     </div>

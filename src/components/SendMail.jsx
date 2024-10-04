@@ -3,6 +3,8 @@ import { RxCross2 } from 'react-icons/rx';
 
 import { useSelector, useDispatch } from 'react-redux';
 import { setOpen } from '../redux/appSlice';
+import { addDoc, serverTimestamp, collection } from 'firebase/firestore';
+import { db } from '../firebase';
 
 const SendMail = () => {
   const dispatch = useDispatch();
@@ -12,14 +14,26 @@ const SendMail = () => {
   const subInputRef = useRef();
   const msgInputRef = useRef();
 
-  const submitHandler = (e) => {
+  const submitHandler = async (e) => {
     e.preventDefault();
-    const formData = {
-        to: toInputRef.current.value,
-        subject: subInputRef.current.value,
-        message: msgInputRef.current.value
+    // const formData = {
+    //     to: toInputRef.current.value,
+    //     subject: subInputRef.current.value,
+    //     message: msgInputRef.current.value
+    // }
+    try{
+        const docRef = await addDoc(collection(db, "emails"), {
+            to: toInputRef.current.value,
+            subject: subInputRef.current.value,
+            message: msgInputRef.current.value,
+            createdAt: serverTimestamp()
+        });
+        console.log("Document written with ID:", docRef.id);
+    } catch(e){
+        console.log("Error adding document: ", e);
     }
-    console.log(formData)
+    
+
     toInputRef.current.value = null;
     subInputRef.current.value = null;
     msgInputRef.current.value = null;
